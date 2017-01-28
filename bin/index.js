@@ -7,6 +7,10 @@ var prompt = require('co-prompt');
 var mkdirp = require('mkdirp');
 var program = require('commander');
 var fs = require('fs');
+var readlineSync = require('readline-sync');
+
+
+
 var config = require('../files/config/config');
 var www = require('../files/bin/www');
 var cs = require('../files/styleSheet/style');
@@ -18,7 +22,6 @@ var gitIgnore = require('../files/gitIgnore');
 var main = require('../files/main');
 var packageJson = require('../files/package');
 var route = require('../files/route/route');
-var readlineSync = require('readline-sync');
 
 var name;
 

@@ -17,6 +17,7 @@
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
     "commander": "^2.9.0",
+    "mkdirp": "^0.5.1",
     "readline-sync": "^1.4.5",
     "tracer": "^0.8.3"
   }
