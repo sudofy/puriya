@@ -1,6 +1,8 @@
 #! /usr/bin/env node
 
-var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;
+var log = require('tracer').console({
+  format: "{{message}}  - {{file}}:{{line}}"
+}).log;
 var chalk = require('chalk');
 var co = require('co');
 var prompt = require('co-prompt');
@@ -28,58 +30,57 @@ var name;
 
 function makeDir(dirName) {
 
-    mkdirp("./" + name + "/" + dirName, function (err) {
-        //console.log(err);
-    });
+  mkdirp("./" + name + "/" + dirName, function (err) {
+    //console.log(err);
+  });
 
 
 }
 
 function makeFile(dir, fileName, fileData) {
 
-    makeDir(dir);
-    fs.writeFile(name + "/" + dir + "/" + fileName, fileData, function (err) {
-        if (err) {
-            return log(err);
-        }
-        console.log(name + "/" + dir + "/" + fileName + " created");
-    });
+  makeDir(dir);
+  fs.writeFile(name + "/" + dir + "/" + fileName, fileData, function (err) {
+    if (err) {
+      return log(err);
+    }
+    console.log(name + "/" + dir + "/" + fileName + " created");
+  });
 }
 
 
 program
-    .action(function () {
-        co(function *() {
+  .action(function () {
+    co(function* () {
 
-            name = yield prompt('Name:(generator)   ');
+      name = yield prompt('Name:(generator)   ');
 
-            if (!name)
-                name = "generator";
-                mkdirp("./" + name, function (err) {
-            });
-            var mongoURL =  readlineSync.question('Mongo Url :   ');
-            var secretKey =  readlineSync.question('Secret Key :   ');
-            var sealPass =  readlineSync.question('Seal Pass :   ');
-            //var s3Region = yeild prompt('s3 Region');
-            makeFile('config', 'config.js', config(secretKey, sealPass));
-            makeFile('bin', 'www.js', www(name));
-            makeDir('public');
-            // makeFile('public/styleSheet', 'style.css', cs());
-            makeFile('server', 'auth.js', auth());
-            makeFile('server', 'database.js', database());
-            makeFile('server', 'verify.js', verify());
-            makeFile('views', 'error.jade', view.makeError());
-            makeFile('views', 'layout.jade', view.makeLayout());
-            makeFile('views', 'index.jade', view.makeIndex());
-            makeFile('', '.gitIgnore', gitIgnore());
-            makeFile('', 'main.js', main());
-            makeFile('', 'package.json', packageJson(name));
-            makeDir('features');
-            makeFile('routes', 'route.js', route());
+      if (!name)
+        name = "generator";
+      mkdirp("./" + name, function (err) {});
+      var mongoURL = readlineSync.question('Mongo Url :   ');
+      var secretKey = readlineSync.question('Secret Key :   ');
+      var sealPass = readlineSync.question('Seal Pass :   ');
+      //var s3Region = yeild prompt('s3 Region');
+      makeFile('config', 'config.js', config(secretKey, sealPass));
+      makeFile('bin', 'www.js', www(name));
+      makeDir('public');
+      // makeFile('public/styleSheet', 'style.css', cs());
+      makeFile('server', 'auth.js', auth());
+      makeFile('server', 'database.js', database());
+      makeFile('server', 'verify.js', verify());
+      makeFile('views', 'error.jade', view.makeError());
+      makeFile('views', 'layout.jade', view.makeLayout());
+      makeFile('views', 'index.jade', view.makeIndex());
+      makeFile('', '.gitIgnore', gitIgnore());
+      makeFile('', 'main.js', main());
+      makeFile('', 'package.json', packageJson(name));
+      makeDir('features');
+      makeFile('routes', 'route.js', route());
 
-            
-            
-        })
+
+
     })
+  })
 
-    .parse(process.argv);
+  .parse(process.argv);

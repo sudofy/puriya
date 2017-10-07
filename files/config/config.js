@@ -1,8 +1,10 @@
 var config = '';
 
-var makeConfig = function (secretKey, serialPass,mongoUrl) {
+var makeConfig = function (secretKey, serialPass, mongoUrl) {
+  let secKey = secretKey || '864a6s8d^&%*%$&aASU((*&uih';
+  let serpass = serialPass || '84a98sd4*&&%%*(%^*%^&asdas{}>894a*(*$@@8adYG&^&ASFDasd89dad';
 
-    config = `module.exports = {
+  config = `module.exports = {
                       secretKey: '` + secretKey + `' ,
                       mongoUrl: '` + mongoUrl + `',
                       sealPass: '` + serialPass + `' ,
@@ -22,7 +24,7 @@ var makeConfig = function (secretKey, serialPass,mongoUrl) {
                       }
               };`;
 
-    return config;
+  return config;
 
 };
 
