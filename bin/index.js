@@ -11,7 +11,9 @@ var program = require('commander');
 var fs = require('fs');
 var readlineSync = require('readline-sync');
 
-
+var model = require('../files/feature/model');
+var ctrl = require('../files/feature/ctrl');
+var routes = require('../files/feature/routes');
 
 var config = require('../files/config/config');
 var www = require('../files/bin/www');
@@ -24,27 +26,36 @@ var gitIgnore = require('../files/gitIgnore');
 var main = require('../files/main');
 var packageJson = require('../files/package');
 var route = require('../files/route/route');
-
+var user = require('../bin/usermodel');
 var name;
 
 
 function makeDir(dirName) {
 
+  if (dirName == "features") {
+    console.log(dirName + "created");
+  }
   mkdirp("./" + name + "/" + dirName, function (err) {
-    //console.log(err);
-  });
+    if (err) {
+      if (dirName == "features") {
+        console.log(dir + "created");
+      }
+    }
 
+  });
 
 }
 
 function makeFile(dir, fileName, fileData) {
 
   makeDir(dir);
+
   fs.writeFile(name + "/" + dir + "/" + fileName, fileData, function (err) {
     if (err) {
       return log(err);
     }
     console.log(name + "/" + dir + "/" + fileName + " created");
+
   });
 }
 
@@ -57,12 +68,13 @@ program
 
       if (!name)
         name = "generator";
-      mkdirp("./" + name, function (err) {});
-      var mongoURL = readlineSync.question('Mongo Url :   ');
+      mkdirp("./" + name, function (err) { });
+      var mongoURL = readlineSync.question('Mongo Url :   ') || 'mongodb://localhost:27017/test';
       var secretKey = readlineSync.question('Secret Key :   ');
       var sealPass = readlineSync.question('Seal Pass :   ');
+
       //var s3Region = yeild prompt('s3 Region');
-      makeFile('config', 'config.js', config(secretKey, sealPass));
+      makeFile('config', 'config.js', config(secretKey, sealPass, mongoURL));
       makeFile('bin', 'www.js', www(name));
       makeDir('public');
       // makeFile('public/styleSheet', 'style.css', cs());
@@ -76,8 +88,14 @@ program
       makeFile('', 'main.js', main());
       makeFile('', 'package.json', packageJson(name));
       makeDir('features');
-      makeFile('routes', 'route.js', route());
+      setTimeout(function () {
+      
+        makeFile('routes', 'router.js', route());
+        user.makefile(name, `users`, "user.model", model.defaultmodel());
+        user.makefile(name, `users` + "/controllers", "index.ctrl", ctrl.defaultctrl());
+        user.makefile(name, `users`, "user.route", routes.defaultroute());
 
+      }, 1000);
 
 
     })
