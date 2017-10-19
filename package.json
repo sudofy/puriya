@@ -1,10 +1,8 @@
 {
-  "name": "puriya",
+  "name": "test",
   "version": "1.0.0",
   "description": "Generator of express for basic setup of routes and features as well as a basic structure of whole node application for api design",
-  "author": [
-    "Muzammil Bilwani"
-  ],
+  "author": "",
   "main": "commands/index.js",
   "license": "ISC",
   "bin": {
@@ -20,5 +18,17 @@
     "mkdirp": "^0.5.1",
     "readline-sync": "^1.4.5",
     "tracer": "^0.8.3"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sudofy/puriya.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sudofy/puriya/issues"
+  },
+  "homepage": "https://github.com/sudofy/puriya#readme"
 }

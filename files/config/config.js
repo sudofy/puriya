@@ -5,9 +5,9 @@ var makeConfig = function (secretKey, serialPass, mongoUrl) {
   let serpass = serialPass || '84a98sd4*&&%%*(%^*%^&asdas{}>894a*(*$@@8adYG&^&ASFDasd89dad';
 
   config = `module.exports = {
-                      secretKey: '` + secretKey + `' ,
+                      secretKey: '` + secKey + `' ,
                       mongoUrl: '` + mongoUrl + `',
-                      sealPass: '` + serialPass + `' ,
+                      sealPass: '` + serpass + `' ,
                       facebook: {
                         secret: '',
                         accessTokenUrl: '',
