@@ -32,14 +32,10 @@ var name;
 
 function makeDir(dirName) {
 
-  if (dirName == "features") {
-    console.log(dirName + "created");
-  }
+ 
   mkdirp("./" + name + "/" + dirName, function (err) {
     if (err) {
-      if (dirName == "features") {
-        console.log(dir + "created");
-      }
+     
     }
 
   });

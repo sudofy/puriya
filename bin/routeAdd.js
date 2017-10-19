@@ -27,7 +27,7 @@ program
 
             var methodName =  readlineSync.question("Name for function :  ");
 
-            var typeOfRoutes = ['GET','POST','PUT','DElETE'] ;
+            var typeOfRoutes = ['get','post','put','delete'] ;
 
             var type =  typeOfRoutes[readlineSync.keyInSelect(typeOfRoutes,"Type of Route ")];
 
@@ -72,7 +72,7 @@ program
                     return log('Controller not found');
                 }
 
-                var importCtrl = `\nexports. ` + methodName + ` = requires ('./features/` + feature + `/` + feature + '.' + methodName + `.ctrl');`;
+                var importCtrl = `\nexports. ` + methodName + ` = require ('./../controllers/` + feature + '.' + methodName + `.ctrl.js').`+methodName+`;`;
 
                 // console.log(importCtrl);
 
