@@ -74,7 +74,7 @@ program
       modelData.push({ name: nameData, type: type })
     }
 
-    var name = process.argv[2];
+    var name = process.argv[3];
     
     //console.log(model);
 

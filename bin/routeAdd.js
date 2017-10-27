@@ -17,11 +17,11 @@ program
 
     .action(function () {
         co(function *() {
-            var feature = process.argv[2];
+            var feature = process.argv[3];
 
             if (!fs.existsSync('./features/' + feature)) {
 
-                log("Please add the feature first of " + feature + " by sudofy-api-feature" );
+                log("Please add the feature first of " + feature + " by puriya feature" );
                 process.exit(1);
             }
 

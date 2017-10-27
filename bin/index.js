@@ -57,9 +57,22 @@ function makeFile(dir, fileName, fileData) {
 
 
 program
-  .action(function () {
-    co(function* () {
 
+  .action(function () {
+
+    co(function* () {
+if(process.argv[2]=="feature"){
+ 
+  var feature=require('./feature.js');
+
+}else if(process.argv[2]=="router"){
+  
+  var feature=require('./routeAdd.js');
+
+}
+else
+{
+  
       name = yield prompt('Name:(generator)   ');
 
       if (!name)
@@ -93,7 +106,7 @@ program
 
       }, 1000);
 
-
+    }
     })
   })
 
