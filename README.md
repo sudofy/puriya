@@ -62,6 +62,10 @@ After that you have to type the following command
 ```sh
 $ ../bin > node www
 ```
+Or
+```sh
+$  > npm start
+```
 ### How to Add Feature 
 For Adding features make sure you are in the applcation folder ,then type the following command
 ```sh
