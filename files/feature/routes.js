@@ -25,7 +25,7 @@ router.get('/me', verify.nocache, verify.user, verify.unseal, userCtrl.verifyUse
 module.exports = router;\n` 
 return droute },
     makeBasic: function (featurenName) {
-
+      
         routes = `
         var express = require('express');\n
         var router = express.Router();\n

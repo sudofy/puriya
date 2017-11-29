@@ -6,9 +6,9 @@
   "main": "commands/index.js",
   "license": "ISC",
   "bin": {
-    "sudofy-api-feature": "./bin/feature.js",
-    "sudofy-api": "./bin/index.js",
-    "sudofy-api-router": "./bin/routeAdd.js"
+   
+    "puriya": "./bin/index.js"
+    
   },
   "dependencies": {
     "chalk": "^1.1.3",
