@@ -21,13 +21,13 @@ Puriya requires [Node.js](https://nodejs.org/) and  [Npm](https://www.npmjs.com)
 How to install Puriya ?
 
 ```sh
-> $ npm install -g puriya
+> $ npm install puriya
 ```
 ### Quick Start
 The quickest way to scaffold your application by following command as shown below:
 
 ```sh
-> $ sudofy-api name
+> $ puriya name
 ```
 name should be entered by user ,no default value.
 After that :
@@ -60,12 +60,16 @@ Make sure that you are in the bin folder and first install node_modules folder b
 ```
 After that you have to type the following command 
 ```sh
-> $ node www
+$ ../bin > node www
+```
+Or
+```sh
+$  > npm start
 ```
 ### How to Add Feature 
 For Adding features make sure you are in the applcation folder ,then type the following command
 ```sh
-> $ sudofy-api-feature name-of-feature
+> $ puriya feature name-of-feature
 ```
 Name of feature is the feature that user want to create ,no default value exist .
 After that 
@@ -88,7 +92,7 @@ After that All files related to particular feature are created.
 ### How to Add Route
 For Adding features make sure you are in the applcation folder ,then type the following command
 ```sh
-> $ sudofy-api-router name-of-route
+> $ puriya router name-of-route
 ```
 Name of route is the name of route that user want to create, no-default value exist . But before creating a particular route ,feature should be added with same name before creating a route.
 After that if a feature is already created than 
