@@ -32,10 +32,10 @@ var name;
 
 function makeDir(dirName) {
 
- 
+
   mkdirp("./" + name + "/" + dirName, function (err) {
     if (err) {
-     
+
     }
 
   });
@@ -61,52 +61,46 @@ program
   .action(function () {
 
     co(function* () {
-if(process.argv[2]=="feature"){
- 
-  var feature=require('./feature.js');
+      if (process.argv[2] == "feature") {
 
-}else if(process.argv[2]=="router"){
- 
-  var feature=require('./routeAdd.js');
+        var feature = require('./feature.js');
 
-}
-else
-{
-  
-      name = yield prompt('Name:(generator)   ');
+      } else if (process.argv[2] == "router") {
 
-      if (!name)
-        name = "generator";
-      mkdirp("./" + name, function (err) { });
-      var mongoURL = readlineSync.question('Mongo Url :   ') || 'mongodb://localhost:27017/test';
-      var secretKey = readlineSync.question('Secret Key :   ');
-      var sealPass = readlineSync.question('Seal Pass :   ');
+        var feature = require('./routeAdd.js');
 
-      //var s3Region = yeild prompt('s3 Region');
-      makeFile('config', 'config.js', config(secretKey, sealPass, mongoURL));
-      makeFile('bin', 'www.js', www(name));
-      makeDir('public');
-      // makeFile('public/styleSheet', 'style.css', cs());
-      makeFile('server', 'auth.js', auth());
-      makeFile('server', 'database.js', database());
-      makeFile('server', 'verify.js', verify());
-      makeFile('views', 'error.jade', view.makeError());
-      makeFile('views', 'layout.jade', view.makeLayout());
-      makeFile('views', 'index.jade', view.makeIndex());
-      makeFile('', '.gitIgnore', gitIgnore());
-      makeFile('', 'main.js', main());
-      makeFile('', 'package.json', packageJson(name));
-      makeDir('features');
-      setTimeout(function () {
-      
+      }
+      else {
+
+        name = yield prompt('Name:(generator)   ');
+
+        if (!name)
+          name = "generator";
+        mkdirp("./" + name, function (err) { });
+        var mongoURL = readlineSync.question('Mongo Url :   ') || 'mongodb://localhost:27017/test';
+        var secretKey = readlineSync.question('Secret Key :   ');
+        var sealPass = readlineSync.question('Seal Pass :   ');
+
+        //var s3Region = yeild prompt('s3 Region');
+        makeFile('config', 'config.js', config(secretKey, sealPass, mongoURL));
+        makeFile('bin', 'www.js', www(name));
+        makeDir('public');
+        // makeFile('public/styleSheet', 'style.css', cs());
+        makeFile('server', 'auth.js', auth());
+        makeFile('server', 'database.js', database());
+        makeFile('server', 'verify.js', verify());
+        makeFile('views', 'error.jade', view.makeError());
+        makeFile('views', 'layout.jade', view.makeLayout());
+        makeFile('views', 'index.jade', view.makeIndex());
+        makeFile('', '.gitIgnore', gitIgnore());
+        makeFile('', 'main.js', main());
+        makeFile('', 'package.json', packageJson(name));
+        makeDir('features');
         makeFile('routes', 'router.js', route());
         user.makefile(name, `users`, "user.model", model.defaultmodel());
         user.makefile(name, `users` + "/controllers", "index.ctrl", ctrl.defaultctrl());
         user.makefile(name, `users`, "user.route", routes.defaultroute());
-
-      }, 1000);
-
-    }
+      }
     })
   })
 

@@ -1,8 +1,9 @@
 var ctrl = ``;
 
-module.exports=ctrl;
+module.exports = ctrl;
 var makeCtrl = {
-  defaultctrl : function(){ var dctrl=`var user = require('./../user.model.js');
+  defaultctrl: function () {
+    var dctrl = `var User = require('./../user.model.js');
   var passport = require('passport'); 
   var Verify = require('../../../server/verify.js'); 
   var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log; 
@@ -125,31 +126,31 @@ var makeCtrl = {
     });
   };
   `
-  return dctrl;
-},
-    makeBasicCtrl: function (name) {
+    return dctrl;
+  },
+  makeBasicCtrl: function (name) {
 
 
-        ctrl = `var ` + name + ` = require('./../` + name + `.model.js');
+    ctrl = `var ` + name + ` = require('./../` + name + `.model.js');
                 var passport = require('passport');
                 var Verify = require('../../../server/verify.js');
                 var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;
                 var auth = require('../../../server/auth');
                 exports.listAll = function (req, res, next) {
-                  `+name+`.find({}, function (err, users) {
+                  `+ name + `.find({}, function (err, users) {
                     if (err) throw err;
                     res.json(users);
                   });
                 };
                 `;
 
-        return ctrl;
+    return ctrl;
 
-    },
+  },
 
-    makerouteCtrl: function (name, query, queryModel, methodName) {
+  makerouteCtrl: function (name, query, queryModel, methodName) {
 
-        ctrl = `var ` + name + ` = require('./../` + name + `.model.js');\n
+    ctrl = `var ` + name + ` = require('./../` + name + `.model.js');\n
                 var ` + queryModel + ` =  require('./../../` + queryModel + `/` + queryModel + `.model.js');\n
                 var Verify = require('../../../server/verify.js');\n
                 var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
@@ -173,9 +174,9 @@ var makeCtrl = {
                 
                 `;
 
-        return ctrl;
+    return ctrl;
 
-    }
+  }
 
 
 };
