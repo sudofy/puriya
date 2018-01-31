@@ -202,11 +202,11 @@ const makeCtrl = {
 
   makerouteCtrl: function (name, query, queryModel, methodName) {
 
-    ctrl = `var ${name}  = require('./../${name}.model.js');\n
-                var ${queryModel}=  require('./../../${queryModel}/${queryModel}.model.js');\n
-                var Verify = require('../../../server/verify.js');\n
-                var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
-                var auth = require('../../../server/auth');\n
+    ctrl = `const ${name}  = require('./../${name}.model.js');\n
+            const ${queryModel}=  require('./../../${queryModel}/${queryModel}.model.js');\n
+            const Verify = require('../../../server/verify.js');\n
+            const log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
+            const auth = require('../../../server/auth');\n
                  exports.{methodName}= function (req, res, next) {\n
                    ${queryModel}.${query}({}, function (err,data ) {\n
                      if (err) {\n

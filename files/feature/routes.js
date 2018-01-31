@@ -39,11 +39,11 @@ const makeRoute = {
   makeBasic: function (name) {
 
     route = `
-          var express = require('express');\n
-          var router = express.Router();\n
-          var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
-          var verify = require('../../server/verify');\n
-          var ${featurenName}Ctrl = require('./controllers/index.ctrl.js');\n
+    const express = require('express');\n
+    const router = express.Router();\n
+    const log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
+    const verify = require('../../server/verify');\n
+    const ${featurenName}Ctrl = require('./controllers/index.ctrl.js');\n
           
           // GET \n
           router.get('/', verify.user, ${featurenName}Ctrl.listAll);\n

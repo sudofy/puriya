@@ -43,12 +43,12 @@ let model = {
   addNewModal: function (name, modelData) {
 
     model = `
-    var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
-    var mongoose = require('mongoose');\n
-    var Schema = mongoose.Schema;\n
-    var passportLocalMongoose = require('passport-local-mongoose');\n
+    const log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
+    const mongoose = require('mongoose');\n
+    const Schema = mongoose.Schema;\n
+    const passportLocalMongoose = require('passport-local-mongoose');\n
     
-    var ${name} = new Schema({\n
+    const ${name} = new Schema({\n
     
     `;
 
