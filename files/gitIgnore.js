@@ -1,11 +1,11 @@
-var ignore = '' ;
+let ignore = '';
 
-var makeGitIgnore = function () {
+const makeGitIgnore = function () {
 
-    ignore = `.idea/
+  ignore = `.idea/
              node_modules/`;
 
-    return ignore;
+  return ignore;
 };
 
-module.exports = makeGitIgnore ;
+module.exports = makeGitIgnore;

@@ -6,22 +6,22 @@
   "main": "commands/index.js",
   "license": "ISC",
   "bin": {
-   
     "puriya": "./bin/index.js"
-    
   },
   "dependencies": {
     "chalk": "^1.1.3",
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
     "commander": "^2.9.0",
+    "eslint": "^4.16.0",
     "mkdirp": "^0.5.1",
     "readline-sync": "^1.4.5",
     "tracer": "^0.8.3"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "node_modules/.bin/eslint -c ./.eslintrc.json --ext .js **/*.js"
   },
   "repository": {
     "type": "git",
