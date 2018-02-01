@@ -33,6 +33,8 @@ const esLint = require('../files/eslint');
 const eslintignore = require('../files/eslintignore');
 const route = require('../files/route/route');
 const user = require('../bin/usermodel');
+const congfigspec = require('../files/spec/config');
+const dropdb = require('../files/spec/dropdb');
 let name; function makeDir(dirName) {
 
   mkdirp(`./${name}/${dirName}`, function (err) {
@@ -86,6 +88,7 @@ program
         const sealPass = readlineSync.question('Seal Pass :   ');
         // const s3Region = yeild prompt('s3 Region');
         makeDir('config');
+        makeDir('spec');
         makeDir('features');
         makeFile('config', 'index.js', index());
         makeFile('config/env', 'default.js', defaultConfig(secretKey, sealPass, mongoURL));
@@ -105,6 +108,8 @@ program
         makeFile('', 'main.js', main());
         makeFile('', 'package.json', packageJson(name));
         makeFile('routes', 'router.js', route());
+        makeFile('spec', 'config.js', congfigspec());
+        makeFile('spec', 'dropdb.js', dropdb());
         user.makefile(name, `users`, "user.model", model.defaultmodel());
         user.makefile(name, `users`, "user.ctrl", ctrl.defaultctrl());
         user.makefile(name, `users`, "user.route", routes.defaultroute());
