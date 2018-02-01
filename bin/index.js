@@ -68,6 +68,10 @@ program
 
         const feature = require('./routeAdd.js');
 
+      } else if (process.argv[2].toString() === "spec") {
+
+        const feature = require('./addSpec.js');
+
       } else {
         name = yield prompt('Name:(generator)   ');
 
@@ -105,6 +109,7 @@ program
         user.makefile(name, `users`, "user.ctrl", ctrl.defaultctrl());
         user.makefile(name, `users`, "user.route", routes.defaultroute());
         user.makefile(name, `users`, "user.messages", usermessages.defaultusermessage());
+        user.makefile(name, `users`, "user.spec", userspec.defaultspec());
       }
     });
   })

@@ -7,6 +7,7 @@ const mkdirp = require('mkdirp');
 const program = require('commander');
 const fs = require('fs');
 const ctrl = require('../files/feature/ctrl');
+const routes = require('../files/feature/routes');
 const log = require('tracer').console({ format: "{{message}}  - {{file}}:{{line}}" }).log;
 const readlineSync = require('readline-sync');
 
@@ -42,8 +43,7 @@ program
           return log('Router file not found');
         }
 
-        const newRoute = `router.${type} ( ${route} ,verify.user,${feature}Ctrl.${methodName})`;
-
+        const newRoute = routes.addRoute(route, feature, methodName, type);
         // console.log(newRoute);
 
         const result = data.replace(/----API----Route/g, `${methodName} for ${type} route \n ${newRoute} \n //----API----Route`);
@@ -56,28 +56,28 @@ program
 
       const dataCtrl = ctrl.makerouteCtrl(feature, query, queryRoute, methodName);
 
-      fs.writeFile(`./features/${feature}/${feature}.ctrl.js`, dataCtrl, function (err) {
+      fs.appendFile(`./features/${feature}/${feature}.ctrl.js`, dataCtrl, function (err) {
 
         if (err) { return log('Controller not found'); }
 
       });
 
-      fs.readFile(`./features/${feature}/${feature}.ctrl.js`, 'utf8', function (err, data) {
-        if (err) {
-          return log('Controller not found');
-        }
+      // fs.readFile(`./features/${feature}/${feature}.ctrl.js`, 'utf8', function (err, data) {
+      //   if (err) {
+      //     return log('Controller not found');
+      //   }
 
-        const importCtrl = `\nexports.${methodName} = require ('./../${feature}.ctrl.js).${methodName};`;
+      //   const importCtrl = `\nexports.${methodName} = require ('./../${feature}.ctrl.js).${methodName};`;
 
-        // console.log(importCtrl);
+      //   // console.log(importCtrl);
 
-        // const result = data.replace(/----API----Route/g, methodName + ' for  ' + type + ' route  \n' + newRoute + '\n //----API----Route');
+      //   // const result = data.replace(/----API----Route/g, methodName + ' for  ' + type + ' route  \n' + newRoute + '\n //----API----Route');
 
-        fs.appendFile(`./features/${feature}/${feature}.ctrl.js`, importCtrl, function (err) {
-          if (err) { return log(err); }
-        });
+      //   fs.appendFile(`./features/${feature}/${feature}.ctrl.js`, importCtrl, function (err) {
+      //     if (err) { return log(err); }
+      //   });
 
-      });
+      // });
 
     });
 

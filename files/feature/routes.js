@@ -13,7 +13,7 @@ const makeRoute = {
     
     // GET users
     router.route(\`/\`)
-      .get(userCtrl.listAll);
+      .get(verify.user,userCtrl.listAll);
     
     // Add user
     router.route(\`/ register\`)
@@ -37,20 +37,19 @@ const makeRoute = {
     return droute;
   },
   makeBasic: function (name) {
-
     route = `
-    const express = require('express');\n
-    const router = express.Router();\n
-    const log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
-    const verify = require('../../server/verify');\n
-    const ${featurenName}Ctrl = require('./controllers/index.ctrl.js');\n
+    const express = require('express');
+    const router = express.Router();
+    const log = require('@common/log');
+    const verify = require('@common/verify');
+    const ${name}Ctrl = require('./${name}.ctrl.js');
           
-          // GET \n
-          router.get('/', verify.user, ${featurenName}Ctrl.listAll);\n
+          // GET 
+          router.get('/', verify.user, ${name}Ctrl.listAll);
           
           //----API----Route\n
           
-          module.exports = router;\n
+          module.exports = router;
           `;
 
     return route;
@@ -58,7 +57,7 @@ const makeRoute = {
 
   addRoute: function (routeAdd, ctrlName, funtionName, type) {
 
-    return `router.${type}(${routeAdd}, verify.user,${ctrlName}.${funtionName})`;
+    return `router.${type}(\`${routeAdd}\`, verify.user,${ctrlName}.${funtionName})`;
 
   }
 

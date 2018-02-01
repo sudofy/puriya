@@ -182,14 +182,14 @@ const makeCtrl = {
   },
   makeBasicCtrl: function (name) {
 
-    ctrl = `const ${name}  = require('./../${name}.model.js');
+    ctrl = `const ${name}  = require('./${name}.model.js');
     const passport = require('passport');
     const log = require('@common/log');
     const auth = require('@common/auth');
     const serverCodes = require('@common/codes');
     const serverMessages = require('@common/messages');
                 exports.listAll = function (req, res, next) {
-                  ${name} .find({}, function (err, users) {
+                  ${name}.find({}, function (err, users) {
                     if (err) throw err;
                     res.json(users);
                   });
@@ -202,26 +202,21 @@ const makeCtrl = {
 
   makerouteCtrl: function (name, query, queryModel, methodName) {
 
-    ctrl = `const ${name}  = require('./../${name}.model.js');\n
-            const ${queryModel}=  require('./../../${queryModel}/${queryModel}.model.js');\n
-            const Verify = require('../../../server/verify.js');\n
-            const log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
-            const auth = require('../../../server/auth');\n
-                 exports.{methodName}= function (req, res, next) {\n
-                   ${queryModel}.${query}({}, function (err,data ) {\n
-                     if (err) {\n
-                        return res.status(500).json({\n
-                          err: err\n
-                        });\n
-                      }\n
-                      return res.status(200).json({\n
-                        message: '',\n
-                        success: true,\n
-                        data: data \n
-                      });\n
-               \n
-                  });\n
-                }\n
+    ctrl = ` exports.${methodName}= function (req, res, next) {
+                   ${queryModel}.${query}({}, function (err,data ) {
+                     if (err) {
+                        return res.status(500).json({
+                          err: err
+                        });
+                      }
+                      return res.status(200).json({
+                        message: '',
+                        success: true,
+                        data: data 
+                      });
+               
+                  });
+                }
                 
                 
                 `;
