@@ -10,6 +10,7 @@ const fs = require('fs');
 const model = require('../files/feature/model');
 const ctrl = require('../files/feature/ctrl');
 const routes = require('../files/feature/routes');
+const spec = require('../files/feature/spec');
 const readlineSync = require('readline-sync');
 
 function makeDir(dirName) {
@@ -69,11 +70,11 @@ program
     }
 
     const name = process.argv[3];
+    makeFile(name, `${name}.messages`, '');
     makeFile(name, `${name}.spec`, '');
     makeFile(name, `${name}.model`, model.addNewModal(name, modelData));
     makeFile(name, `${name}.ctrl`, ctrl.makeBasicCtrl(name));
     makeFile(name, `${name}.route`, routes.makeBasic(name));
-    log('all files created ');
     fs.readFile('./routes/router.js', 'utf8', function (err, data) {
       if (err) {
         log(`File not found  ${err.path}`);
@@ -82,7 +83,6 @@ program
       // console.log(data);
       const newImport = `const  ${name}  = require(\`../features/${name}/${name}.route\`);`;
       const newRoute = `router.use(\`/${name}\`,${name});`;
-      log('all files created1 ');
       let result = data.replace(/----API----Route/, `${name} route  \n ${newRoute}  \n //----API----Route`);
       result = result.replace(/----API---import/, `${name} route Import \n ${newImport} \n//----API---import\n`);
       fs.writeFile('./routes/router.js', result, function (err) {

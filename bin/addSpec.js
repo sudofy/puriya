@@ -24,12 +24,12 @@ program
         log(`Please add the feature first of ${feature} by puriya feature`);
         process.exit(1);
       }
-      let result = '';
+      let result;
       let bodyfield = '';
       const noofTestSuites = readlineSync.question("No of testsuite :  ");
       for (let i = 0; i < noofTestSuites; i++) {
         const describeMessage = readlineSync.question("Message for describe block :  ");
-        result = spec.addtestsuite(describeMessage);
+        result = spec.addimports() + spec.addtestsuite(describeMessage);
         const noofTestCases = readlineSync.question("No of testcases :  ");
         for (let j = 0; j < noofTestCases; j++) {
           const itMessage = readlineSync.question("Message for it block :  ");

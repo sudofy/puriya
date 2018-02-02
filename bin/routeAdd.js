@@ -38,13 +38,40 @@ program
       const query = queries[readlineSync.keyInSelect(queries, "Enter query :  ")];
       const queryRoute = readlineSync.question("Enter query model:   ");
 
+      const apidoc =
+        `/**
+       * 
+       * @api {${type}} ${route}
+       * @apiName ${methodName}
+       * @apiGroup ${queryRoute}
+       * @apiVersion  major.minor.patch
+       * 
+       * 
+       * @apiParam  {String} paramName description
+       * 
+       * @apiSuccess (200) {type} name description
+       * 
+       * @apiParamExample  {type} Request-Example:
+         {
+             property : value
+         }
+       * 
+       * 
+       * @apiSuccessExample {type} Success-Response:
+         {
+             property : value
+         }
+       * 
+       * 
+       */
+      `;
       fs.readFile(`./features/${feature}/${feature}.route.js`, 'utf8', function (err, data) {
         if (err) {
           return log('Router file not found');
         }
-
-        const newRoute = routes.addRoute(route, feature, methodName, type);
-        // console.log(newRoute);
+        let newRoute;
+        newRoute = apidoc;
+        newRoute = newRoute + routes.addRoute(route, feature, methodName, type);
 
         const result = data.replace(/----API----Route/g, `${methodName} for ${type} route \n ${newRoute} \n //----API----Route`);
 

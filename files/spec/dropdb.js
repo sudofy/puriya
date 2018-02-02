@@ -1,5 +1,6 @@
 const makedropdb = function () {
-  return `const mongoose = require('mongoose');
+  return `require('module-alias/register');
+const mongoose = require('mongoose');
 const config = require('@config');
 describe(\`drop db\`, function () {
   it(\`should drop database\`, function (done) {

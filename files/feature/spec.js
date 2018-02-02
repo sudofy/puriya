@@ -3,10 +3,10 @@ const spec = ``;
 module.exports = spec;
 const makeRoute = {
   defaultspec: function () {
-    const userspec = `require('module-alias/register');
-    const config = require('../../spec/config');
+    const userspec = `const config = require('../../spec/config');
     const frisby = require('frisby');
     const Joi = frisby.Joi;
+    let token;
     
     describe(\`User register :\`, () => {
       it(\`should save information of user\`, done => {
@@ -29,31 +29,20 @@ const makeRoute = {
     
     });
     describe(\`User Login :\`, () => {
-      it(\`it should login the user\`, done => {
+      it (\`it should login the user\`, done => {
         frisby
-          .post(\`\${config.domain}/user/login\`, {
+          .post (\`\${config.domain}/user/login\`, {
             username: \`dany600\`,
             password: \`12345\`,
           })
-          .expect(\`status\`, 200)
-          .expect(\`json\`, {
-    
+          .expect (\`status\`, 200)
+          .expect (\`json\`, {
             message: \`Login successful!\`,
-            success: true,
-            data: {
-              token: Joi.string(),
-              user: {
-                firstname: \` \`,
-                lastname: \` \`,
-                __v: 0,
-                username: \`dany600\`,
-                _id: Joi.string()
-              }
-            }
           })
-    
-          .done(done);
-    
+          .then (res => {
+            token = res._body.data.token;
+          })
+          .done (done);
       });
     
       it(\`it should  fail to login the user with username missing\`, done => {
@@ -91,7 +80,11 @@ const makeRoute = {
       it(\`it should fail to get all users\`, done => {
         frisby
           .get(\`\${config.domain}/user/\`, {
-    
+            headers: {
+              'x-access-token': token,
+              origin: config.domain,
+              'Content-Type': 'application/json',
+            }
           })
           .expect(\`status\`, 403)
           .expect(\`json\`, {
@@ -107,7 +100,7 @@ const makeRoute = {
     return userspec;
   },
   addtestsuite: function (describemessage) {
-    return `describe(\`${describemessage} :\`, () => {`;
+    return `describe(\`${describemessage} :\`, done => {`;
   },
   addtest: function (itmessage, method, route, body, status, expectType, expectfield) {
     return `
@@ -120,9 +113,15 @@ const makeRoute = {
           .expect(\`${expectType}\`, {
            ${expectfield}
           })
-          .done();
+          .done(done);
       });
 `;
+  },
+
+  addimports: function () {
+    return `const config = require('../../spec/config');
+    const frisby = require('frisby');
+    const Joi = frisby.Joi;`;
   }
 
 };

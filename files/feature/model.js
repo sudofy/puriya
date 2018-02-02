@@ -60,7 +60,7 @@ let model = {
 
     model += `});\n
     
-    module.exports = mongoose.model(${name}, ${name});\n`;
+    module.exports = mongoose.model(\`${name}\`, ${name});\n`;
 
     return model;
   }

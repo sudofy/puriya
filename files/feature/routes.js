@@ -57,7 +57,7 @@ const makeRoute = {
 
   addRoute: function (routeAdd, ctrlName, funtionName, type) {
 
-    return `router.${type}(\`${routeAdd}\`, verify.user,${ctrlName}.${funtionName})`;
+    return `router.${type}(\`${routeAdd}\`, verify.user,${ctrlName}Ctrl.${funtionName});`;
 
   }
 
