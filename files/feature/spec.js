@@ -121,7 +121,9 @@ const makeRoute = {
   addimports: function () {
     return `const config = require('../../spec/config');
     const frisby = require('frisby');
-    const Joi = frisby.Joi;`;
+    const Joi = frisby.Joi;
+    
+    `;
   }
 
 };

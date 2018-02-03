@@ -87,7 +87,6 @@ program
       result = result.replace(/----API---import/, `${name} route Import \n ${newImport} \n//----API---import\n`);
       fs.writeFile('./routes/router.js', result, function (err) {
         if (err) { return log(err); }
-        log(result);
       });
     });
 
