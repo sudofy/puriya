@@ -75,7 +75,8 @@ program
         const feature = require('./addSpec.js');
 
       } else {
-        name = yield prompt('Name:(generator)   ');
+
+        name = process.argv[3].toString();
 
         if (!name) { name = `generator`; }
         mkdirp(`./${name}`, function (err) {

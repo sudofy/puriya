@@ -6,7 +6,7 @@
   "main": "commands/index.js",
   "license": "ISC",
   "bin": {
-    "puriya": "./bin/index.js"
+    "puriya init": "./bin/index.js"
   },
   "dependencies": {
     "chalk": "^1.1.3",
