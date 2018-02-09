@@ -1,56 +1,222 @@
-var routes = ``;
-module.exports=routes;
-var route = {
-defaultroute:function(){ var droute=`var express = require('express');\n
-var router = express.Router();\n
-var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
-var verify = require('../../server/verify');\n
-var userCtrl = require('./controllers/index.ctrl.js');\n
+let route = ``;
 
+module.exports = route;
+const makeRoute = {
+  defaultroute: function () {
+    const droute = `const express = require('express');
+  
+    const router = express.Router();
+    
+    const verify = require('@common/verify');
+    
+    const userCtrl = require('./user.ctrl.js');
 
-//GET users \n
-router.get('/', verify.user, userCtrl.listAll); \n
+     /**
+     * 
+     * @api {get} /
+     * @apiName listAll
+     * @apiGroup User
+     * @apiVersion  major.minor.patch
+     * 
+     * 
+     * @apiParam  {String} paramName description
+     * 
+     * @apiSuccess (200) {type} name description
+     * 
+     * @apiParamExample  {type} Request-Example:
+       {
+           property : value
+       }
+     * 
+     * 
+     * @apiSuccessExample {type} Success-Response:
+       {
+           property : value
+       }
+     * 
+     * 
+     */
 
-//Add user \n
-router.post('/register', userCtrl.register); \n
+    // GET users
+    router.route(\`/\`)
+      .get(verify.user,userCtrl.listAll);
+    
+    /**
+     * 
+     * @api {post} /register
+     * @apiName register
+     * @apiGroup User
+     * @apiVersion  major.minor.patch
+     * 
+     * 
+     * @apiParam  {String} paramName description
+     * 
+     * @apiSuccess (200) {type} name description
+     * 
+     * @apiParamExample  {type} Request-Example:
+       {
+           property : value
+       }
+     * 
+     * 
+     * @apiSuccessExample {type} Success-Response:
+       {
+           property : value
+       }
+     * 
+     * 
+     */
 
-//Login \n
-router.post('/login', userCtrl.login); \n
+    // Add user
+    router.route(\`/register\`)
+      .post(userCtrl.register);
 
-//Logout \n
-router.get('/logout', userCtrl.logout); \n
+      /**
+       * 
+       * @api {post} /login
+       * @apiName login
+       * @apiGroup User
+       * @apiVersion  major.minor.patch
+       * 
+       * 
+       * @apiParam  {String} paramName description
+       * 
+       * @apiSuccess (200) {type} name description
+       * 
+       * @apiParamExample  {type} Request-Example:
+         {
+             property : value
+         }
+       * 
+       * 
+       * @apiSuccessExample {type} Success-Response:
+         {
+             property : value
+         }
+       * 
+       * 
+       */
 
-//Verify me \n
-router.get('/me', verify.nocache, verify.user, verify.unseal, userCtrl.verifyUser); \n
-module.exports = router;\n` 
-return droute },
-    makeBasic: function (featurenName) {
+    // Login
+    router.route(\`/login\`)
+      .post(userCtrl.login);
+
+      /**
+       * 
+       * @api {get} /logout
+       * @apiName logout
+       * @apiGroup User
+       * @apiVersion  major.minor.patch
+       * 
+       * 
+       * @apiParam  {String} paramName description
+       * 
+       * @apiSuccess (200) {type} name description
+       * 
+       * @apiParamExample  {type} Request-Example:
+         {
+             property : value
+         }
+       * 
+       * 
+       * @apiSuccessExample {type} Success-Response:
+         {
+             property : value
+         }
+       * 
+       * 
+       */
+
+    // Logout
+    router.route(\`/logout\`)
+      .get(userCtrl.logout);
+
+      /**
+       * 
+       * @api {get} /me
+       * @apiName verifyUser
+       * @apiGroup User
+       * @apiVersion  major.minor.patch
+       * 
+       * 
+       * @apiParam  {String} paramName description
+       * 
+       * @apiSuccess (200) {type} name description
+       * 
+       * @apiParamExample  {type} Request-Example:
+         {
+             property : value
+         }
+       * 
+       * 
+       * @apiSuccessExample {type} Success-Response:
+         {
+             property : value
+         }
+       * 
+       * 
+       */
+
+    // Verify me
+    
+    router.route(\`/me\`)
+      .get(verify.nocache, verify.user, verify.unseal, userCtrl.verifyUser);
+    
+    module.exports = router;
+  `;
+    return droute;
+  },
+  makeBasic: function (name) {
+    route = `
+    const express = require('express');
+    const router = express.Router();
+    const log = require('@common/log');
+    const verify = require('@common/verify');
+    const ${name}Ctrl = require('./${name}.ctrl.js');
+
+      /**
+       * 
+       * @api {get} /me
+       * @apiName listAll
+       * @apiGroup ${name}
+       * @apiVersion  major.minor.patch
+       * 
+       * 
+       * @apiParam  {String} paramName description
+       * 
+       * @apiSuccess (200) {type} name description
+       * 
+       * @apiParamExample  {type} Request-Example:
+         {
+             property : value
+         }
+       * 
+       * 
+       * @apiSuccessExample {type} Success-Response:
+         {
+             property : value
+         }
+       * 
+       * 
+       */
       
-        routes = `
-        var express = require('express');\n
-        var router = express.Router();\n
-        var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;\n
-        var verify = require('../../server/verify');\n
-        var ` + featurenName + `Ctrl = require('./controllers/index.ctrl.js');\n
-        
-        // GET \n
-        router.get('/', verify.user, ` + featurenName + `Ctrl.listAll);\n
-        
-        //----API----Route\n
-        
-        module.exports = router;\n
-        `;
+          // GET 
+          router.get('/', verify.user, ${name}Ctrl.listAll);
+          
+          //----API----Route\n
+          
+          module.exports = router;
+          `;
 
-        return routes;
-    },
+    return route;
+  },
 
-    addRoute: function (routeAdd, ctrlName, funtionName, type) {
+  addRoute: function (routeAdd, ctrlName, funtionName, type) {
 
-        return `router.` + type + `('` + routeAdd + `, verify.user,` + ctrlName + `.` + funtionName + `)`;
+    return `router.${type}(\`${routeAdd}\`, verify.user,${ctrlName}Ctrl.${funtionName});`;
 
-    }
+  }
 
 };
 
-
-module.exports = route;
+module.exports = makeRoute;

@@ -1,30 +1,21 @@
-var route = '';
+let route = '';
+const makeRoute = function () {
 
-var makeRoute = function () {
-
-  route = `   var express = require('express');\n
-                var log = require('tracer').console({format : "{{message}}  - {{file}}:{{line}}"}).log;\n
-                var verify = require('../server/verify');\n
-                // default user route Import
-                var user = require('../features/users/user.route');\n
-                //----API---import\n
-                
-                
-                module.exports = function (app, config, models) {\n
-                  var router = express.Router();\n
-                
-                  
-                
-                
-                //default user route
-                  router.use('/user', user);
-                  //----API----Routes   \n
-                  app.use('/api', router);\n
-                };\n
-              `;
-
+  route = `   const express = require('express');
+  // default user route Import
+  const user = require('../features/users/user.route');
+  //----API---import\n
+  module.exports = function (app) {
+  
+    const router = express.Router();
+    // default user route
+    router.use(\`/user\`, user);
+    //----API----Routes   \n
+    app.use(\`/api\`, router);
+  
+  };
+`;
   return route;
 
 };
-
 module.exports = makeRoute;

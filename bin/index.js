@@ -1,41 +1,45 @@
 #! /usr/bin/env node
 
-var log = require('tracer').console({
-  format: "{{message}}  - {{file}}:{{line}}"
+const log = require('tracer').console({
+  format: `{{message}}  - {{file}}:{{line}}`
 }).log;
-var chalk = require('chalk');
-var co = require('co');
-var prompt = require('co-prompt');
-var mkdirp = require('mkdirp');
-var program = require('commander');
-var fs = require('fs');
-var readlineSync = require('readline-sync');
+const co = require('co');
+const prompt = require('co-prompt');
+const mkdirp = require('mkdirp');
+const program = require('commander');
+const fs = require('fs');
+const readlineSync = require('readline-sync');
 
-var model = require('../files/feature/model');
-var ctrl = require('../files/feature/ctrl');
-var routes = require('../files/feature/routes');
+const model = require('../files/feature/model');
+const ctrl = require('../files/feature/ctrl');
+const routes = require('../files/feature/routes');
+const usermessages = require('../files/feature/messages');
+const userspec = require('../files/feature/spec');
+const index = require('../files/config/index');
+const defaultConfig = require('../files/config/env/default');
+const dev = require('../files/config/env/dev');
+const production = require('../files/config/env/production');
+const www = require('../files/bin/www');
+const auth = require('../files/common/auth');
+const database = require('../files/common/database');
+const verify = require('../files/common/verify');
+const logs = require('../files/common/logs');
+const codes = require('../files/common/codes');
+const messages = require('../files/common/messages');
+const gitIgnore = require('../files/gitIgnore');
+const main = require('../files/main');
+const packageJson = require('../files/package');
+const esLint = require('../files/eslint');
+const eslintignore = require('../files/eslintignore');
+const route = require('../files/route/route');
+const user = require('../bin/usermodel');
+const congfigspec = require('../files/spec/config');
+const dropdb = require('../files/spec/dropdb');
+let name; function makeDir(dirName) {
 
-var config = require('../files/config/config');
-var www = require('../files/bin/www');
-var cs = require('../files/styleSheet/style');
-var auth = require('../files/server/auth');
-var database = require('../files/server/database');
-var verify = require('../files/server/verify');
-var view = require('../files/views/view');
-var gitIgnore = require('../files/gitIgnore');
-var main = require('../files/main');
-var packageJson = require('../files/package');
-var route = require('../files/route/route');
-var user = require('../bin/usermodel');
-var name;
-
-
-function makeDir(dirName) {
-
-
-  mkdirp("./" + name + "/" + dirName, function (err) {
+  mkdirp(`./${name}/${dirName}`, function (err) {
     if (err) {
-
+      log(err);
     }
 
   });
@@ -46,62 +50,75 @@ function makeFile(dir, fileName, fileData) {
 
   makeDir(dir);
 
-  fs.writeFile(name + "/" + dir + "/" + fileName, fileData, function (err) {
+  fs.writeFile(`${name}/${dir}/${fileName}`, fileData, function (err) {
     if (err) {
       return log(err);
     }
-    console.log(name + "/" + dir + "/" + fileName + " created");
+    log(`${name}/${dir}/${fileName}created`);
 
   });
 }
-
-
 program
 
   .action(function () {
-
     co(function* () {
-      if (process.argv[2] == "feature") {
+      if (process.argv[2].toString() === "feature") {
 
-        var feature = require('./feature.js');
+        const feature = require('./feature.js');
 
-      } else if (process.argv[2] == "router") {
+      } else if (process.argv[2].toString() === "router") {
 
-        var feature = require('./routeAdd.js');
+        const feature = require('./routeAdd.js');
 
-      }
-      else {
+      } else if (process.argv[2].toString() === "spec") {
 
-        name = yield prompt('Name:(generator)   ');
+        const feature = require('./addSpec.js');
 
-        if (!name)
-          name = "generator";
-        mkdirp("./" + name, function (err) { });
-        var mongoURL = readlineSync.question('Mongo Url :   ') || 'mongodb://localhost:27017/test';
-        var secretKey = readlineSync.question('Secret Key :   ');
-        var sealPass = readlineSync.question('Seal Pass :   ');
+      } else {
 
-        //var s3Region = yeild prompt('s3 Region');
-        makeFile('config', 'config.js', config(secretKey, sealPass, mongoURL));
+        name = process.argv[3].toString();
+
+        if (!name) { name = `generator`; }
+        mkdirp(`./${name}`, function (err) {
+          if (err) {
+            return log(err);
+          }
+        });
+        const mongoURL = readlineSync.question('Mongo Url :   ');
+        const secretKey = readlineSync.question('Secret Key :   ');
+        const sealPass = readlineSync.question('Seal Pass :   ');
+        // const s3Region = yeild prompt('s3 Region');
+        makeDir('config');
+        makeDir('spec');
+        makeDir('features');
+        makeFile('config', 'index.js', index());
+        makeFile('config/env', 'default.js', defaultConfig(secretKey, sealPass, mongoURL));
+        makeFile('config/env', 'dev.js', dev(secretKey, sealPass, mongoURL));
+        makeFile('config/env', 'production.js', production(secretKey, sealPass, mongoURL));
         makeFile('bin', 'www.js', www(name));
-        makeDir('public');
         // makeFile('public/styleSheet', 'style.css', cs());
-        makeFile('server', 'auth.js', auth());
-        makeFile('server', 'database.js', database());
-        makeFile('server', 'verify.js', verify());
-        makeFile('views', 'error.jade', view.makeError());
-        makeFile('views', 'layout.jade', view.makeLayout());
-        makeFile('views', 'index.jade', view.makeIndex());
+        makeFile('common', 'auth.js', auth());
+        makeFile('common', 'database.js', database());
+        makeFile('common', 'verify.js', verify());
+        makeFile('common', 'log.js', logs());
+        makeFile('common', 'codes.js', codes());
+        makeFile('common', 'messages.js', messages());
         makeFile('', '.gitIgnore', gitIgnore());
+        makeFile('', '.eslintignore', eslintignore());
+        makeFile('', '.eslintrc.json', esLint());
         makeFile('', 'main.js', main());
         makeFile('', 'package.json', packageJson(name));
-        makeDir('features');
         makeFile('routes', 'router.js', route());
+        makeFile('spec', 'config.js', congfigspec());
+        makeFile('spec', 'dropdb.js', dropdb());
         user.makefile(name, `users`, "user.model", model.defaultmodel());
-        user.makefile(name, `users` + "/controllers", "index.ctrl", ctrl.defaultctrl());
+        user.makefile(name, `users`, "user.ctrl", ctrl.defaultctrl());
         user.makefile(name, `users`, "user.route", routes.defaultroute());
+        user.makefile(name, `users`, "user.messages", usermessages.defaultusermessage());
+        user.makefile(name, `users`, "user.spec", userspec.defaultspec());
       }
-    })
+    });
   })
 
   .parse(process.argv);
+

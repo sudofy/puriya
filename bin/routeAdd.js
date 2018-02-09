@@ -1,92 +1,113 @@
 #! /usr/bin/env node
 
-var chalk = require('chalk');
-var co = require('co');
-var prompt = require('co-prompt');
-var mkdirp = require('mkdirp');
-var program = require('commander');
-var fs = require('fs');
-var ctrl = require('../files/feature/ctrl');
-var log = require('tracer').console({format: "{{message}}  - {{file}}:{{line}}"}).log;
-var readlineSync = require('readline-sync');
-
+const chalk = require('chalk');
+const co = require('co');
+const prompt = require('co-prompt');
+const mkdirp = require('mkdirp');
+const program = require('commander');
+const fs = require('fs');
+const ctrl = require('../files/feature/ctrl');
+const routes = require('../files/feature/routes');
+const log = require('tracer').console({ format: "{{message}}  - {{file}}:{{line}}" }).log;
+const readlineSync = require('readline-sync');
 
 program
 
-    .arguments('<feature>')
+  .arguments('<feature>')
 
-    .action(function () {
-        co(function *() {
-            var feature = process.argv[3];
+  .action(function () {
+    co(function* () {
+      const feature = process.argv[3];
 
-            if (!fs.existsSync('./features/' + feature)) {
+      if (!fs.existsSync(`./features/${feature}`)) {
 
-                log("Please add the feature first of " + feature + " by puriya feature" );
-                process.exit(1);
-            }
+        log(`Please add the feature first of ${feature} by puriya feature`);
+        process.exit(1);
+      }
 
-            var methodName =  readlineSync.question("Name for function :  ");
+      const methodName = readlineSync.question("Name for function :  ");
 
-            var typeOfRoutes = ['get','post','put','delete'] ;
+      const typeOfRoutes = ['get', 'post', 'put', 'delete'];
 
-            var type =  typeOfRoutes[readlineSync.keyInSelect(typeOfRoutes,"Type of Route ")];
+      const type = typeOfRoutes[readlineSync.keyInSelect(typeOfRoutes, "Type of Route ")];
 
-            var route =  readlineSync.question("Enter Route :  ");
+      const route = readlineSync.question("Enter Route :  ");
 
-            var queries = ["find","findById","findOne","findByIdAndUpdate","findOneAndUpdate","findOneAndRemove","update","remove","findAll"]
+      const queries = ["find", "findById", "findOne", "findByIdAndUpdate", "findOneAndUpdate", "findOneAndRemove", "update", "remove", "findAll"];
 
-            var query =  queries[readlineSync.keyInSelect(queries,"Enter query :  ")];
-            var queryRoute = readlineSync.question("Enter query model:   ")
+      const query = queries[readlineSync.keyInSelect(queries, "Enter query :  ")];
+      const queryRoute = readlineSync.question("Enter query model:   ");
 
+      const apidoc =
+        `/**
+       * 
+       * @api {${type}} ${route}
+       * @apiName ${methodName}
+       * @apiGroup ${queryRoute}
+       * @apiVersion  major.minor.patch
+       * 
+       * 
+       * @apiParam  {String} paramName description
+       * 
+       * @apiSuccess (200) {type} name description
+       * 
+       * @apiParamExample  {type} Request-Example:
+         {
+             property : value
+         }
+       * 
+       * 
+       * @apiSuccessExample {type} Success-Response:
+         {
+             property : value
+         }
+       * 
+       * 
+       */
+      `;
+      fs.readFile(`./features/${feature}/${feature}.route.js`, 'utf8', function (err, data) {
+        if (err) {
+          return log('Router file not found');
+        }
+        let newRoute;
+        newRoute = apidoc;
+        newRoute = newRoute + routes.addRoute(route, feature, methodName, type);
 
+        const result = data.replace(/----API----Route/g, `${methodName} for ${type} route \n ${newRoute} \n //----API----Route`);
 
-            fs.readFile('./features/' + feature + '/' + feature + '.route.js', 'utf8', function (err, data) {
-                if (err) {
-                    return log('Router file not found');
-                }
+        fs.writeFile(`./features/${feature}/${feature}.route.js`, result, function (err) {
+          if (err) { return log(err); }
+        });
 
-                var newRoute = `router.` + type + `('` + route + `',verify.user,` + feature + `Ctrl.` + methodName + `)`;
+      });
 
-                // console.log(newRoute);
+      const dataCtrl = ctrl.makerouteCtrl(feature, query, queryRoute, methodName);
 
-                var result = data.replace(/----API----Route/g, methodName + ' for  ' + type + ' route  \n' + newRoute + '\n //----API----Route');
+      fs.appendFile(`./features/${feature}/${feature}.ctrl.js`, dataCtrl, function (err) {
 
-                fs.writeFile('./features/' + feature + '/' + feature + '.route.js', result, function (err) {
-                    if (err) return log(err);
-                });
+        if (err) { return log('Controller not found'); }
 
-            });
+      });
 
-            var dataCtrl = ctrl.makerouteCtrl(feature, query, queryRoute,methodName);
+      // fs.readFile(`./features/${feature}/${feature}.ctrl.js`, 'utf8', function (err, data) {
+      //   if (err) {
+      //     return log('Controller not found');
+      //   }
 
+      //   const importCtrl = `\nexports.${methodName} = require ('./../${feature}.ctrl.js).${methodName};`;
 
-            fs.writeFile('./features/' + feature + '/' + '/controllers/' + feature + '.' + methodName + '.ctrl.js', dataCtrl, function (err) {
+      //   // console.log(importCtrl);
 
-                if (err) return log('Controller not found');
+      //   // const result = data.replace(/----API----Route/g, methodName + ' for  ' + type + ' route  \n' + newRoute + '\n //----API----Route');
 
-            });
+      //   fs.appendFile(`./features/${feature}/${feature}.ctrl.js`, importCtrl, function (err) {
+      //     if (err) { return log(err); }
+      //   });
 
+      // });
 
-            fs.readFile('./features/' + feature + '/controllers/' + 'index.ctrl.js', 'utf8', function (err, data) {
-                if (err) {
-                    return log('Controller not found');
-                }
+    });
 
-                var importCtrl = `\nexports. ` + methodName + ` = require ('./../controllers/` + feature + '.' + methodName + `.ctrl.js').`+methodName+`;`;
+  })
 
-                // console.log(importCtrl);
-
-                // var result = data.replace(/----API----Route/g, methodName + ' for  ' + type + ' route  \n' + newRoute + '\n //----API----Route');
-
-                fs.appendFile('./features/' + feature + '/controllers/' + 'index.ctrl.js', importCtrl, function (err) {
-                    if (err) return log(err);
-                });
-
-            });
-
-
-        })
-
-    })
-
-    .parse(process.argv);
+  .parse(process.argv);

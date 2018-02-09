@@ -1,13 +1,13 @@
-var config = '';
+let config = '';
 
-var makeConfig = function (secretKey, serialPass, mongoUrl) {
-  let secKey = secretKey || '864a6s8d^&%*%$&aASU((*&uih';
-  let serpass = serialPass || '84a98sd4*&&%%*(%^*%^&asdas{}>894a*(*$@@8adYG&^&ASFDasd89dad';
+const makeConfig = function (secretKey, serialPass, mongoUrl) {
+  const secKey = secretKey || `\`864a6s8d^&%*%$&aASU((*&uih\``;
+  const serpass = serialPass || `\`84a98sd4*&&%%*(%^*%^&asdas{}>894a*(*$@@8adYG&^&ASFDasd89dad\``;
 
   config = `module.exports = {
-                      secretKey: '` + secKey + `' ,
-                      mongoUrl: '` + mongoUrl + `',
-                      sealPass: '` + serpass + `' ,
+                      secretKey: ${secKey} ,
+                      mongoUrl: \`mongodb://localhost:27017/test\`,
+                      sealPass: ${serpass},
                       facebook: {
                         secret: '',
                         accessTokenUrl: '',
