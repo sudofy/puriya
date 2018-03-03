@@ -27,12 +27,7 @@ How to install Puriya ?
 The quickest way to scaffold your application by following command as shown below:
 
 ```sh
-> $ puriya name
-```
-name should be entered by user ,no default value.
-After that :
-```sh
-> $ Name:(generator) 
+> $ puriya init name
 ```
 Application name is entered by user that is the name of application ,otherwise default value is 'Generator'.
 ```sh
@@ -87,6 +82,7 @@ Keyname should be entered by user ,empty value is not acceptable.
 ```
 Type of data should be selected from the given list ,if user select '0'
 then list is prompt again .
+
 After that All files related to particular feature are created.
 
 ### How to Add Route
@@ -117,4 +113,55 @@ Type of query method should be selected from the given list
 ```
 Query model should be entered by user .
 
+### How to Add Spec Test
 
+After we build the api , We also have to test the api to provide stability
+
+```sh
+> $ puriya spec name_of_spec
+```
+Enter number of describe blocks
+
+```sh
+> $ No of testsuite : 
+```
+Then the message for describe block example : "User Login"
+```sh
+> $  Message for describe block : 
+```
+Number of it blocks
+```sh
+> $ No of testcases :
+```
+Message for it block example : "should log in the user"
+```sh
+> $ Message for it block : 
+```
+Select Method of http from given list example : get, post, put etc
+```sh
+> $ Method of http
+```
+Enter route here example : /example/:id
+```sh
+> $ Enter Route : 
+```
+If the http request is post or put then input number of body fields
+```sh
+> $ No of body fields : 
+```
+Input body fields  example : "text":"Hello , How are you "
+```sh
+> $ Body fields : 
+```
+Input expect status example : 200 , 404 , 400 etc
+```sh
+> $ Expect status: 
+```
+Input nuumber of expected fields
+```sh
+> $ No of Expectedfield:
+```
+Input expected fields example : "message : Successfully login the user"
+```sh
+> $ Expect fields : 
+```
